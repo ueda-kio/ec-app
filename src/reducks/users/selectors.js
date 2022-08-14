@@ -10,3 +10,9 @@ export const getUserId = createSelector(
     [usersSelector],
     (state) => state.uid // users.uidを返すという意味
 );
+
+// stateからuserIdだけ取得する関数
+export const getUserName = createSelector(
+    [usersSelector],
+    (state) => state.username // users.uidを返すという意味
+);

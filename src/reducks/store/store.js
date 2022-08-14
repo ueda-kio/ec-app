@@ -4,6 +4,7 @@ import {
   applyMiddleware
 } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
+import thunk from 'redux-thunk';
 // import { ProductsReducer } from '../product/reducers'
 import { UsersReducer } from '../users/reducers';
 
@@ -18,7 +19,8 @@ const createStore = (history) => {
       users: UsersReducer,
     }),
     applyMiddleware(
-      routerMiddleware(history)
+      routerMiddleware(history),
+      thunk // thunkモジュールを`applyMiddleware`の引数に直接渡す
     )
   )
 }

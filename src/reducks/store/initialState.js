@@ -1,7 +1,7 @@
 // StoreのStateの初期値
 const initialState = {
   users: {
-    isSignedIn: true,
+    isSignedIn: false,
     uid: '',
     username: 'user'
   }
