@@ -12,7 +12,7 @@ const productsRef = db.collection('products');
  * @param {string} gender 性別
  * @param {number} price 価格
  */
-export const saveProducts = (name, description, category, gender, price) => {
+export const saveProducts = (name, description, category, gender, price, images) => {
     return async (dispatch) => {
         const timestamp = FirebaseTimestamp.now();
 
@@ -21,7 +21,8 @@ export const saveProducts = (name, description, category, gender, price) => {
             description,
             category,
             gender,
-            price: parseInt(price, 10)
+            price: parseInt(price, 10),
+            images,
         };
 
         const ref = productsRef.doc();
