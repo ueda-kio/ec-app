@@ -7,6 +7,7 @@ export const signInAction = (userState) => { // user情報を引数に受け取�
     type: 'SIGN_IN',
     payload: {
       isSignedIn: true,
+      role: userState.role,
       uid: userState.uid,
       username: userState.username
     }
