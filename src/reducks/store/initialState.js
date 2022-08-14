@@ -1,5 +1,8 @@
 // StoreのStateの初期値
 const initialState = {
+  products: {
+    list: []
+  },
   users: {
     isSignedIn: false,
     role: '',
