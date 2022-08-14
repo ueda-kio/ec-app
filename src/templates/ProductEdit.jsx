@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { SetSizesArea } from '../components/Products';
 import ImageArea from '../components/Products/ImageArea';
 import { PrimaryButton, TextInput, SelectBox } from '../components/UIkit';
+import { db } from '../firebase';
 import { saveProducts } from '../reducks/products/operations';
 
 const ProductEdit = () => {
@@ -14,6 +17,7 @@ const ProductEdit = () => {
     const [gender, setGender] = useState('');
     const [images, setImages] = useState([]);
     const [price, setPrice] = useState('');
+    const [sizes, setSizes] = useState([]);
 
     const genders = [
         {id: 'all', name: 'すべて'},
@@ -39,6 +43,32 @@ const ProductEdit = () => {
         setPrice(e.target.value);
     }, [setPrice]);
 
+    // URLから商品IDを取得（編集画面のみURLにIDが含まれている）
+    const productId = (() => {
+        const endOfPath = window.location.pathname.split('/product/edit')[1];
+        if (endOfPath === '') return '';
+        return endOfPath.slice(1);
+    })();
+
+    // 編集画面の場合データベースから商品情報を取得しstateに反映させる（反映させるだけで自動でinputのvalueに挿入される）
+    useEffect(() => {
+        if (productId === '') return;
+
+        db.collection('products').doc(productId).get()
+            .then((snapshot) => {
+                // データベースから商品情報を取得
+                const data = snapshot.data();
+                // ローカルstateに格納
+                setImages(data.images);
+                setName(data.name);
+                setDescription(data.description);
+                setCategory(data.category);
+                setGender(data.gender);
+                setPrice(data.price);
+                setSizes(data.sizes);
+            });
+    }, [productId]);
+
     return (
         <section>
             <h2 className='u-text__headline u-text-center'>商品の登録・編集</h2>
@@ -60,10 +90,21 @@ const ProductEdit = () => {
                     fullWidth={true} label={'価格'} multiline={false} required={true} rows={1} value={price} type={'number'} onChange={inputPrice}
                 />
                 <div className='module-spacer--medium'></div>
+                <SetSizesArea sizes={sizes} setSizes={setSizes} />
+                <div className='module-spacer--medium'></div>
                 <div className='center'>
                     <PrimaryButton
                         label={'商品情報を保存'}
-                        onClick={() => dispatch(saveProducts(name, description, category, gender, price, images))}
+                        onClick={() => dispatch(saveProducts(
+                            productId,
+                            name,
+                            description,
+                            category,
+                            gender,
+                            price,
+                            images,
+                            sizes
+                        ))}
                     />
                 </div>
             </div>
