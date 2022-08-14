@@ -20,6 +20,7 @@ export const signOutAction = () => { // user情報を空にすれば良い
     type: 'SIGN_OUT',
     payload: {
       isSignedIn: false,
+      role: '',
       uid: '',
       username: 'Guest'
     }

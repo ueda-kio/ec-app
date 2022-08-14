@@ -8,11 +8,17 @@ const usersSelector = (state) => state.users;
 // コンポーネント側で使用
 export const getUserId = createSelector(
     [usersSelector],
-    (state) => state.uid // users.uidを返すという意味
+    (state) => state.uid
 );
 
 // stateからuserIdだけ取得する関数
 export const getUserName = createSelector(
     [usersSelector],
-    (state) => state.username // users.uidを返すという意味
+    (state) => state.username
+);
+
+// stateからisSignedInだけ取得する関数
+export const getSignedIn = createSelector(
+    [usersSelector],
+    (state) => state.isSignedIn
 );

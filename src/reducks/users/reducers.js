@@ -8,7 +8,12 @@ export const UsersReducer = (state = initialState.users, action) => {
       return {
         ...state,
         ...action.payload // stateの値をpayloadで上書きする
-      }
+      };
+
+    case Actions.SIGN_OUT:
+      return {
+        ...action.payload // initialStateに戻す
+      };
 
       default:
         return state

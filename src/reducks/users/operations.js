@@ -1,6 +1,38 @@
 import { push } from 'connected-react-router';
 import { auth, db, FirebaseTimestamp } from '../../firebase/index';
-import { signInAction } from './action';
+import { signInAction, signOutAction } from './action';
+
+/**
+ * ユーザーのログイン状態を監視。
+ * - 未ログインならサインイン画面へ遷移
+ * - ログイン済みなら`signInAction`を実行しtopへ遷移
+ */
+export const listenAuthState = () => {
+    return async (dispatch) => {
+        return auth.onAuthStateChanged((user) => {
+            console.log('user', user);
+            if (user) { // 認証済み
+                const uid = user.uid;
+
+                // firebaseのデータベースから取得する
+                db.collection('users').doc(uid).get()
+                    .then((snapshot) => {
+                        const data = snapshot.data();
+
+                        // signInActionを実行
+                        dispatch(signInAction({
+                            isSignedIn: true,
+                            role: data.role,
+                            uid: uid,
+                            username: data.username
+                        }));
+                    });
+            } else { // 未認証
+                dispatch(push('/signin'));
+            }
+        });
+    }
+};
 
 export const signIn = (email, password) => {
     return async (dispatch) => {
@@ -80,3 +112,13 @@ export const signUp = (username, email, password, confirmPassword) => {
             })
     };
 }
+
+export const signOut = () => {
+    return async (dispatch) => {
+        auth.signOut()
+            .then(() => {
+                dispatch(signOutAction());
+                dispatch(push('/signin'));
+            })
+    };
+};
