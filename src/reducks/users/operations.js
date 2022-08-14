@@ -10,7 +10,6 @@ import { signInAction, signOutAction } from './action';
 export const listenAuthState = () => {
     return async (dispatch) => {
         return auth.onAuthStateChanged((user) => {
-            console.log('user', user);
             if (user) { // 認証済み
                 const uid = user.uid;
 

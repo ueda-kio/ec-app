@@ -10,8 +10,6 @@ const Auth = ({ children }) => {
     const selector = useSelector((state) => state);
     const isSingedIn = getSignedIn(selector);
 
-    console.log('isSingedIn', isSingedIn);
-
     // mount時に１回だけログイン済みかどうかを確認する
     useEffect(() => {
         if (!isSingedIn) {
