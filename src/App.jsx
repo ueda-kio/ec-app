@@ -1,15 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux';
-import './App.css';
+import React from 'react';
+import Router from './Router';
 
 const App = () => {
-  const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
-
-  console.log(selector.users)
-  return (
-    <>
-    </>
-  );
-}
+    return (
+        <main>
+            <Router />
+        </main>
+    );
+};
 
 export default App;
