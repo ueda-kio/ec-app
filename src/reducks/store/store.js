@@ -1,30 +1,25 @@
-import { createStore as reduxCreateStore, combineReducers } from 'redux';
+import {
+  createStore as reduxCreateStore,
+  combineReducers,
+  applyMiddleware
+} from 'redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 // import { ProductsReducer } from '../product/reducers'
-import { UserReducer } from '../users/reducers';
+import { UsersReducer } from '../users/reducers';
 
 /**
- * @example
- * ```
- * // stateのデータ構造のオブジェクトを連結したものをreturnする
- * {
- *   products: {},
- *   users: {
- *     isSignedIn: false,
- *     uid: '',
- *     username: ''
- *   }
- * }
- * ```
- * @returns {object}
+ * reducerをまとめる
+ * @param {any} history ルーティング時の情報（refererなど）
  */
-const createStore = () => {
+const createStore = (history) => {
   return reduxCreateStore(
-
-    // 分割したreducerたちをまとめるヤツ
     combineReducers({
-      // products: ProductsReducer,
-      users: UserReducer
-    })
+      router: connectRouter(history), // historyの情報をstoreに`router`という名前で渡す
+      users: UsersReducer,
+    }),
+    applyMiddleware(
+      routerMiddleware(history)
+    )
   )
 }
 
