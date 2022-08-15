@@ -8,7 +8,6 @@ const ProductList = () => {
     const dispatch = useDispatch();
     const selector = useSelector(state => state);
     const products = getProducts(selector);
-    console.log('products', products);
 
     // const query = window.location.search;
     // const gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : '';
