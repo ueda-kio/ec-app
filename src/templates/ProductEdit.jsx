@@ -44,7 +44,7 @@ const ProductEdit = () => {
     }, [setPrice]);
 
     // URLから商品IDを取得（編集画面のみURLにIDが含まれている）
-    const productId = (() => {
+    const id = (() => {
         const endOfPath = window.location.pathname.split('/product/edit')[1];
         if (endOfPath === '') return '';
         return endOfPath.slice(1);
@@ -52,9 +52,9 @@ const ProductEdit = () => {
 
     // 編集画面の場合データベースから商品情報を取得しstateに反映させる（反映させるだけで自動でinputのvalueに挿入される）
     useEffect(() => {
-        if (productId === '') return;
+        if (id === '') return;
 
-        db.collection('products').doc(productId).get()
+        db.collection('products').doc(id).get()
             .then((snapshot) => {
                 // データベースから商品情報を取得
                 const data = snapshot.data();
@@ -67,7 +67,7 @@ const ProductEdit = () => {
                 setPrice(data.price);
                 setSizes(data.sizes);
             });
-    }, [productId]);
+    }, [id]);
 
     return (
         <section>
@@ -96,7 +96,7 @@ const ProductEdit = () => {
                     <PrimaryButton
                         label={'商品情報を保存'}
                         onClick={() => dispatch(saveProducts(
-                            productId,
+                            id,
                             name,
                             description,
                             category,

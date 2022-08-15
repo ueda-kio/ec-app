@@ -18,13 +18,13 @@ export const fetchProducts = () => {
     }
 };
 
-export const deleteProduct = (productId) => {
+export const deleteProduct = (id) => {
     // `getState()`で現在のstoreのstateを参照できる
     return async (dispatch, getState) => {
-        productsRef.doc(productId).delete()
+        productsRef.doc(id).delete()
             .then(() => {
                 const prevProducts = getState().products.list;
-                const nextProducts = prevProducts.filter(product => product.id !== productId);
+                const nextProducts = prevProducts.filter(product => product.id !== id);
                 dispatch(deleteProductAction(nextProducts));
             })
     }
@@ -32,7 +32,7 @@ export const deleteProduct = (productId) => {
 
 /**
  * 商品情報をデータベースにセットする
- * @param {string | ''} productId 商品ID（編集画面の場合存在する）
+ * @param {string | ''} id 商品ID（編集画面の場合存在する）
  * @param {string} name 商品名
  * @param {string} description 商品説明
  * @param {string} category カテゴリ
@@ -40,7 +40,7 @@ export const deleteProduct = (productId) => {
  * @param {number} price 価格
  * @param {Array} sizes 商品サイズ
  */
-export const saveProducts = (productId, name, description, category, gender, price, images, sizes) => {
+export const saveProducts = (id, name, description, category, gender, price, images, sizes) => {
     return async (dispatch) => {
         const timestamp = FirebaseTimestamp.now();
 
@@ -55,14 +55,11 @@ export const saveProducts = (productId, name, description, category, gender, pri
             updated_at: timestamp
         };
 
-        //TODO `productId`を参照してもいいかも
-        let id = '';
-        // 商品の新規登録の場合（URLに商品情報が含まれていない場合）
-        if (productId === '') {
-            const ref = productsRef.doc();
-            id = ref.id; // firebaseが自動で採番してくれた値を格納
-            data.id = id; // dataの中に入れておく
+        if (id === '') {
+            const ref = productsRef.doc()
             data.created_at = timestamp;
+            id = ref.id;
+            data.id = id;
         }
 
         // firebaseのデータベースへ値をセット（`merge: true`とすると商品情報の更新に対応可）

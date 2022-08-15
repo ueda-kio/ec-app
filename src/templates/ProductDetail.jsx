@@ -55,10 +55,10 @@ const ProductDetail = () => {
     const dispatch = useDispatch();
     const selector = useSelector(state => state);
     const path = selector.router.location.pathname; // routerで管理しているURL
-    const productId = path.split('/product/')[1];
+    const id = path.split('/product/')[1];
 
     useEffect(() => {
-        db.collection('products').doc(productId).get()
+        db.collection('products').doc(id).get()
             .then((doc) => {
                 const data = doc.data();
                 setProduct(data);
