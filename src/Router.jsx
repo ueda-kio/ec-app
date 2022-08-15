@@ -7,7 +7,8 @@ import {
     Reset,
     ProductEdit,
     ProductList,
-    ProductDetail
+    ProductDetail,
+    CartList
 } from './templates';
 
 const Router = () => {
@@ -22,6 +23,8 @@ const Router = () => {
                 <Route exact path={'(/)?'} component={ProductList} />
                 <Route exact path={'/product/:id'} component={ProductDetail} />
                 <Route path={'/product/edit(/:id)?'} component={ProductEdit} />
+
+                <Route exact path={'/cart'} component={CartList} />
             </Auth>
         </Switch>
     );

@@ -57,6 +57,7 @@ const ProductDetail = () => {
     const path = selector.router.location.pathname; // routerで管理しているURL
     const id = path.split('/product/')[1];
 
+    // productコレクション内の情報を画面に反映
     useEffect(() => {
         db.collection('products').doc(id).get()
             .then((doc) => {
