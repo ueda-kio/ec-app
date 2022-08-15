@@ -9,7 +9,8 @@ import {
     ProductList,
     ProductDetail,
     CartList,
-    OrderConfirm
+    OrderConfirm,
+    OrderHistory
 } from './templates';
 
 const Router = () => {
@@ -27,6 +28,7 @@ const Router = () => {
 
                 <Route exact path={'/cart'} component={CartList} />
                 <Route exact path={'/order/confirm'} component={OrderConfirm} />
+                <Route exact path={'/order/history'} component={OrderHistory} />
             </Auth>
         </Switch>
     );
