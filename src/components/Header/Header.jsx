@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSignedIn } from '../../reducks/users/selectors';
 import logo from '../../assets/img/icons/logo.png';
-import { HeaderMenu } from './index';
+import { HeaderMenu, ClosableDrawer } from './index';
 import { push } from 'connected-react-router';
 
 const useStyles = makeStyles(() =>
@@ -39,12 +39,15 @@ const Header = () => {
 
     const [sideBarOpen, setSideBarOpen] = useState(false);
 
-    const handleDrawerToggle = useCallback((event, isOpen) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-        setSideBarOpen(isOpen)
-    }, [setSideBarOpen]);
+    const handleDrawerToggle = useCallback((e, isOpen) => {
+        if (
+            e.type === 'keydown' &&
+            (e.key === 'Tab' || e.key === 'Shift')
+        ) return;
+
+        // setSideBarOpen(isOpen)
+        setSideBarOpen(!sideBarOpen);
+    }, [setSideBarOpen, sideBarOpen]);
 
     return (
         <div className={classes.root}>
@@ -53,12 +56,12 @@ const Header = () => {
                     <img className={classes.logo} alt='ホーム画面へ' src={logo} width='128' onClick={() => dispatch(push('/'))} role='button' />
                     {isSignedIn && (
                         <div className={classes.iconButtons}>
-                            <HeaderMenu />
-                            {/* <HeaderMenu handleDrawerToggle={handleDrawerToggle} /> */}
+                            <HeaderMenu handleDrawerToggle={handleDrawerToggle} />
                         </div>
                     )}
                 </Toolbar>
             </AppBar>
+            <ClosableDrawer open={sideBarOpen} onClose={handleDrawerToggle} />
             {/* <ClosableDrawer open={sideBarOpen} onClose={handleDrawerToggle} /> */}
         </div>
     );
