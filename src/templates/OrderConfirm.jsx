@@ -44,9 +44,9 @@ const OrderConfirm = () => {
     const tax = useMemo(() => (subtotal + shippingFee) * 0.1, [subtotal, shippingFee]);
     const total = useMemo(() => subtotal + shippingFee + tax, [subtotal, shippingFee, tax]);
 
-    // const order = useCallback(() => {
-    //     dispatch(orderProduct(productsInCart, total));
-    // }, [productsInCart]);
+    const order = useCallback(() => {
+        dispatch(orderProduct(productsInCart, total));
+    }, [productsInCart, total]);
 
     return (
         <section className='c-section-wrapin'>
@@ -66,7 +66,7 @@ const OrderConfirm = () => {
                     <Divider />
                     <div className='module-spacer--extra-extra-small' />
                     <TextDetail label={'合計(税込)'} value={'¥' + total.toLocaleString()} />
-                    {/* <PrimaryButton label={'注文を確定する'} onClick={order} /> */}
+                    <PrimaryButton label={'注文を確定する'} onClick={order} />
                 </div>
             </div>
         </section>
