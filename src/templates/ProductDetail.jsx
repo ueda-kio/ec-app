@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import HTMLReactParser from 'html-react-parser';
 import { makeStyles } from '@material-ui/core/styles';
-import { db } from '../firebase';
+import { db, FirebaseTimestamp } from '../firebase';
 import { ImageSwiper, SizeTable } from '../components/Products';
+import { useCallback } from 'react';
+import { addProductToCart } from '../reducks/users/operations';
 
 const useStyles = makeStyles((theme) => ({
     sliderBox: {
@@ -63,6 +65,23 @@ const ProductDetail = () => {
             });
     }, []);
 
+    // 子コンポーネントに渡す関数はメモ化が大事
+    const addProduct = useCallback((selectedSize) => {
+        const timestamp = FirebaseTimestamp.now();
+
+        dispatch(addProductToCart({
+            added_at: timestamp,
+            description: product.description,
+            gender: product.gender,
+            images: product.images,
+            name: product.name,
+            price: product.price,
+            productId: product.id,
+            quantity: 1,
+            size: selectedSize
+        }));
+    }, [product]);
+
     return (
         <section className='c-section-wrapin'>
             {product && (
@@ -74,8 +93,7 @@ const ProductDetail = () => {
                         <h2 className="u-text__headline">{product.name}</h2>
                         <p className={classes.price}>¥{(product.price).toLocaleString()}</p>
                         <div className="module-spacer--small"/>
-                        {/* <SizeTable addProduct={addProduct} sizes={product.sizes} /> */}
-                        <SizeTable sizes={product.sizes} />
+                        <SizeTable addProduct={addProduct} sizes={product.sizes} />
                         <div className="module-spacer--small"/>
                         <p>{returnCodeToBr(product.description)}</p>
                     </div>

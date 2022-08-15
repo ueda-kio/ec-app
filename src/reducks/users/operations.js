@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router';
 import { auth, db, FirebaseTimestamp } from '../../firebase/index';
-import { signInAction, signOutAction } from './action';
+import { fetchProductsInCartAction, signInAction, signOutAction } from './action';
 
 /**
  * ユーザーのログイン状態を監視。
@@ -138,4 +138,20 @@ export const resetPassword = (email) => {
                 })
         }
     };
+};
+
+export const addProductToCart = (addedProduct) => {
+    return async (dispatch, getState) => {
+        const uid = getState().users.uid;
+        const cartRef = db.collection('uid').doc(uid).collection('cart').doc();
+        addedProduct['cartId'] = cartRef.id; // 自分のcartIdをコレクションに追加
+        await cartRef.set(addedProduct);
+        dispatch(push('/'));
+    };
+};
+
+export const fetchProductsInCart = (products) => {
+    return async (dispatch) => {
+        dispatch(fetchProductsInCartAction(products))
+    }
 };

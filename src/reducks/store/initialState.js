@@ -4,11 +4,12 @@ const initialState = {
     list: []
   },
   users: {
+    cart: [],
     isSignedIn: false,
     role: '',
     uid: '',
     username: 'user'
   }
-}
+};
 
-export default initialState
+export default initialState;

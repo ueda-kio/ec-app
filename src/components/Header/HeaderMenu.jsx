@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import MenuIcon from '@material-ui/icons/Menu';
-// import { fetchProductsInCart } from '../../reducks/users/operations';
+import { fetchProductsInCart } from '../../reducks/users/operations';
 import { getProductsInCart, getUserId } from '../../reducks/users/selectors';
 import { db } from '../../firebase/index';
 
@@ -14,43 +14,44 @@ const HeaderMenu = (props) => {
     const dispatch = useDispatch();
     const selector = useSelector((state) => state);
     const userId = getUserId(selector);
-    // let productsInCart = getProductsInCart(selector);
+    let productsInCart = getProductsInCart(selector);
 
     // Listen products in user's cart
-    // useEffect(() => {
-    //     const unsubscribe = db.collection('users').doc(userId).collection('cart')
-    //         .onSnapshot(snapshots => {
+    useEffect(() => {
+        const unsubscribe = db.collection('users').doc(userId).collection('cart')
+            .onSnapshot((snapshots) => {
+                snapshots.docChanges().forEach((change) => {
+                    const product = change.doc.data();
+                    const changeType = change.type
 
-    //             snapshots.docChanges().forEach(change => {
-    //                 const product = change.doc.data();
-    //                 const changeType = change.type
+                    switch (changeType) {
+                        case 'added':
+                            productsInCart.push(product);
+                            break;
+                        case 'modified':
+                            // 変更されたcartIdと同じstateを上書きする
+                            const index = productsInCart.findIndex(product => product.cartId === change.doc.id)
+                            productsInCart[index] = product;
+                            break;
+                        case 'removed':
+                            // cartId以外の要素のみの配列とする
+                            productsInCart = productsInCart.filter(product => product.cartId !== change.doc.id);
+                            break;
+                        default:
+                            break;
+                    }
+                });
 
-    //                 switch (changeType) {
-    //                     case 'added':
-    //                         productsInCart.push(product);
-    //                         break;
-    //                     case 'modified':
-    //                         const index = productsInCart.findIndex(product => product.cartId === change.doc.id)
-    //                         productsInCart[index] = product;
-    //                         break;
-    //                     case 'removed':
-    //                         productsInCart = productsInCart.filter(product => product.cartId !== change.doc.id);
-    //                         break;
-    //                     default:
-    //                         break;
-    //                 }
-    //             });
+                dispatch(fetchProductsInCart(productsInCart));
+            });
 
-    //             dispatch(fetchProductsInCart(productsInCart));
-    //         });
-
-    //     return () => unsubscribe();
-    // },[]);
+        return () => unsubscribe();
+    },[]);
 
     return (
         <>
             <IconButton onClick={() => dispatch(push('/cart'))}>
-                <Badge badgeContent={3} color='secondary'>
+                <Badge badgeContent={productsInCart.length} color='secondary'>
                     <ShoppingCartIcon />
                 </Badge>
             </IconButton>
