@@ -1,28 +1,15 @@
-//! Actionsは「プレーンなオブジェクトを返す」
-// 純粋にデータだけを記述するため
-
-export const SIGN_IN = 'SIGN_IN'; // reducersにActionのタグを渡す
-export const signInAction = (userState) => { // user情報を引数に受け取る
+export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
+export const fetchProductsAction = (products) => {
   return {
-    type: 'SIGN_IN',
-    payload: {
-      isSignedIn: true,
-      role: userState.role,
-      uid: userState.uid,
-      username: userState.username
-    }
-  }
+    type: 'FETCH_PRODUCTS',
+    payload: products
+  };
 };
 
-export const SIGN_OUT = 'SIGN_OUT';
-export const signOutAction = () => { // user情報を空にすれば良い
+export const DELETE_PRODUCTS = 'DELETE_PRODUCTS';
+export const deleteProductAction = (products) => {
   return {
-    type: 'SIGN_OUT',
-    payload: {
-      isSignedIn: false,
-      role: '',
-      uid: '',
-      username: 'Guest'
-    }
-  }
+    type: 'DELETE_PRODUCTS',
+    payload: products
+  };
 };

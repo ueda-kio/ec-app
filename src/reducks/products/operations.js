@@ -1,7 +1,34 @@
 import { push } from 'connected-react-router';
 import { db, FirebaseTimestamp } from '../../firebase/index';
+import { deleteProductAction, fetchProductsAction } from './action';
 
 const productsRef = db.collection('products');
+
+export const fetchProducts = () => {
+    return async (dispatch) => {
+        productsRef.orderBy('updated_at', 'desc').get()
+            .then((snapshots) => {
+                const productList = [];
+                snapshots.forEach((snapshot) => {
+                    const product = snapshot.data();
+                    productList.push(product);
+                });
+                dispatch(fetchProductsAction(productList));
+            })
+    }
+};
+
+export const deleteProduct = (productId) => {
+    // `getState()`で現在のstoreのstateを参照できる
+    return async (dispatch, getState) => {
+        productsRef.doc(productId).delete()
+            .then(() => {
+                const prevProducts = getState().products.list;
+                const nextProducts = prevProducts.filter(product => product.id !== productId);
+                dispatch(deleteProductAction(nextProducts));
+            })
+    }
+};
 
 /**
  * 商品情報をデータベースにセットする
