@@ -140,13 +140,14 @@ export const resetPassword = (email) => {
     };
 };
 
+const usersRef = db.collection('users');
 export const addProductToCart = (addedProduct) => {
     return async (dispatch, getState) => {
         const uid = getState().users.uid;
-        const cartRef = db.collection('uid').doc(uid).collection('cart').doc();
-        addedProduct['cartId'] = cartRef.id; // 自分のcartIdをコレクションに追加
+        const cartRef = usersRef.doc(uid).collection('cart').doc();
+        addedProduct['cartId'] = cartRef.id;
         await cartRef.set(addedProduct);
-        dispatch(push('/'));
+        dispatch(push('/cart'));
     };
 };
 

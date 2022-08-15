@@ -19,6 +19,7 @@ export const signOutAction = () => { // user情報を空にすれば良い
   return {
     type: 'SIGN_OUT',
     payload: {
+      cart: [],
       isSignedIn: false,
       role: '',
       uid: '',
@@ -33,5 +34,4 @@ export const fetchProductsInCartAction = (products) => {
     type: 'FETCH_PRODUCTS_IN_CART',
     payload: products
   }
-
 };
