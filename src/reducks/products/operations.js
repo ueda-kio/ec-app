@@ -32,7 +32,7 @@ export const deleteProduct = (productId) => {
 
 /**
  * 商品情報をデータベースにセットする
- * @param {string} productId 商品ID
+ * @param {string | ''} productId 商品ID（編集画面の場合存在する）
  * @param {string} name 商品名
  * @param {string} description 商品説明
  * @param {string} category カテゴリ
