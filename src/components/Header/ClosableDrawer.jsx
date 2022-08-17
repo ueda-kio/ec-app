@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 
 import Divider from '@material-ui/core/Divider';
@@ -15,10 +15,8 @@ import HistoryIcon from '@material-ui/icons/History';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles, createStyles  } from '@material-ui/core/styles';
-import { signOut } from '../../reducks/users/operations';
 
-// import { signOut } from '../../reducks/users/operations';
-// import { getUserRole } from '../../reducks/users/selectors';
+import { signOut } from '../../reducks/users/operations';
 import { TextInput } from '../UIkit';
 import { db } from '../../firebase';
 
@@ -46,9 +44,6 @@ const ClosableDrawer = (props) => {
     const { container } = props;
     const classes = useStyles();
     const dispatch = useDispatch();
-    const selector = useSelector(state  => state);
-    // const userRole = getUserRole(selector);
-    // const isAdministrator = (userRole === 'administrator');
 
     /**
      * @param {Event} e イベント
@@ -155,14 +150,12 @@ const ClosableDrawer = (props) => {
                     <Divider />
                     <List>
                         {menus.map(menu => (
-                            // ((isAdministrator && menu.id === 'register') || menu.id !== 'register') && (
-                                <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
-                                    <ListItemIcon>
-                                        {menu.icon}
-                                    </ListItemIcon>
-                                    <ListItemText primary={menu.label} />
-                                </ListItem>
-                            // )
+                            <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
+                                <ListItemIcon>
+                                    {menu.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={menu.label} />
+                            </ListItem>
                         ))}
                         <ListItem button key='logout' onClick={() => dispatch(signOut())}>
                             <ListItemIcon>

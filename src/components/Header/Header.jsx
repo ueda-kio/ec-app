@@ -45,7 +45,6 @@ const Header = () => {
             (e.key === 'Tab' || e.key === 'Shift')
         ) return;
 
-        // setSideBarOpen(isOpen)
         setSideBarOpen(!sideBarOpen);
     }, [setSideBarOpen, sideBarOpen]);
 
@@ -62,7 +61,6 @@ const Header = () => {
                 </Toolbar>
             </AppBar>
             <ClosableDrawer open={sideBarOpen} onClose={handleDrawerToggle} />
-            {/* <ClosableDrawer open={sideBarOpen} onClose={handleDrawerToggle} /> */}
         </div>
     );
 }

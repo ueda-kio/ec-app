@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { storage } from "../../firebase/index"
 import { IconButton, makeStyles } from '@material-ui/core';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
@@ -30,7 +29,6 @@ const ImageArea = (props) => {
     }, [props.images]);
 
     const uploadImage = useCallback((e) => {
-        // dispatch(showLoadingAction('uploading...'))
         const file = e.target.files;
         let blob = new Blob(file, { type: 'image/jpeg' }); // fileを直接firebaseにアップできない
 
@@ -52,12 +50,9 @@ const ImageArea = (props) => {
                 // 更新前のstate(画像)を使用する方法
                 //! 配列やオブジェクトのstateを更新するときはこうやる
                 props.setImages((prevState => [...prevState, newImage]));
-                // dispatch(hideLoadingAction());
             });
-        }).catch(() => {
-            // dispatch(hideLoadingAction());
         });
-    }, [props.setImages])
+    }, [props.setImages]);
 
     return (
         <div>
@@ -71,7 +66,11 @@ const ImageArea = (props) => {
                 <IconButton className={classes.icon}>
                     <label>
                         <AddPhotoAlternateIcon />
-                        <input className='u-display-none' type='file' id='image' onChange={e => uploadImage(e)} />
+                        <input
+                            className='u-display-none'
+                            type='file'
+                            id='image'
+                            onChange={e => uploadImage(e)} />
                     </label>
                 </IconButton>
             </div>

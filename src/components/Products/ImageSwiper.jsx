@@ -22,13 +22,13 @@ const ImageSwiper = (props) => {
     return (
         <Swiper {...params}>
             {props.images.length === 0 ? (
-                <div className="p-media__thumb">
-                    <img src={NoImage} alt="No Image"/>
+                <div className='p-media__thumb'>
+                    <img src={NoImage} alt=''/>
                 </div>
             ) : (
                 props.images.map((image) => (
-                    <div className="p-media__thumb" key={image.id}>
-                        <img src={image.path} alt="商品画像"/>
+                    <div className='p-media__thumb' key={image.id}>
+                        <img src={image.path} alt=''/>
                     </div>
                 ))
             )}

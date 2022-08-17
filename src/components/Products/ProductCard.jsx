@@ -6,8 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import NoImage from '../../assets/img/src/no_image.png'
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserRole } from '../../reducks/users/selectors';
+import { useDispatch } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
@@ -70,9 +69,6 @@ const useStyles = makeStyles((theme) => ({
 const ProductCard = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch()
-    const selector = useSelector(state => state);
-    // const userRole = getUserRole(selector)
-    // const isAdministrator = (userRole === 'administrator');
 
     const images = (props.images.length > 0) ? props.images : [{path: NoImage}]
     const price = props.price.toLocaleString();
@@ -133,37 +129,6 @@ const ProductCard = (props) => {
                         </MenuItem>
                     </Menu>
                 </>
-                {/* {isAdministrator && (
-                    <>
-                        <IconButton className={classes.icon} onClick={handleClick}>
-                            <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                            id='menu-appbar'
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem
-                                onClick={() => {
-                                    dispatch(push(`/product/edit/${props.id}`));
-                                    handleClose();
-                                }}
-                            >
-                                編集する
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => {
-                                    dispatch(deleteProduct(props.id));
-                                    handleClose();
-                                }}
-                            >
-                                削除する
-                            </MenuItem>
-                        </Menu>
-                    </>
-                )} */}
             </CardContent>
         </Card>
     );

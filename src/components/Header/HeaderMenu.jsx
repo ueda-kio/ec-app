@@ -16,7 +16,6 @@ const HeaderMenu = (props) => {
     const userId = getUserId(selector);
     let productsInCart = getProductsInCart(selector);
 
-    // Listen products in user's cart
     useEffect(() => {
         const unsubscribe = db.collection('users').doc(userId).collection('cart')
             .onSnapshot((snapshots) => {
