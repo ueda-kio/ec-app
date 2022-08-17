@@ -20,7 +20,7 @@ import { signOut } from '../../reducks/users/operations';
 // import { signOut } from '../../reducks/users/operations';
 // import { getUserRole } from '../../reducks/users/selectors';
 import { TextInput } from '../UIkit';
-// import { db } from '../../firebase';
+import { db } from '../../firebase';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -50,32 +50,36 @@ const ClosableDrawer = (props) => {
     // const userRole = getUserRole(selector);
     // const isAdministrator = (userRole === 'administrator');
 
-    const [searchKeyword, setSearchKeyword] = useState('');
-    // const [filters, setFilters] = useState([
-    //         {
-    //             func: selectMenu,
-    //             label: 'すべて',
-    //             id: 'all',
-    //             value: '/'
-    //         },
-    //         {
-    //             func: selectMenu,
-    //             label: 'メンズ',
-    //             id: 'male',
-    //             value: '/?'
-    //         },
-    //         {
-    //             func: selectMenu,
-    //             label: 'レディース',
-    //             id: 'female',
-    //             value: '/?'
-    //         },
-    //     ]);
-
+    /**
+     * @param {Event} e イベント
+     * @param {string} path filterのvalue
+     */
     const selectMenu = (e, path) => {
         dispatch(push(path));
         props.onClose(e, false); // メニュー選択後にドロワーを閉じる
     };
+
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [filters, setFilters] = useState([
+        {
+            func: selectMenu,
+            label: 'すべて',
+            id: 'all',
+            value: '/'
+        },
+        {
+            func: selectMenu,
+            label: 'メンズ',
+            id: 'male',
+            value: '/?gender=male'
+        },
+        {
+            func: selectMenu,
+            label: 'レディース',
+            id: 'female',
+            value: '/?gender=female'
+        },
+    ]);
 
     const menus = [
         {
@@ -101,17 +105,24 @@ const ClosableDrawer = (props) => {
         },
     ];
 
-    // useEffect(() => {
-    //     db.collection('categories').orderBy('order', 'asc').get()
-    //         .then(snapshots => {
-    //             const list = []
-    //             snapshots.forEach(snapshot => {
-    //                 const category = snapshot.data()
-    //                 list.push({func: selectMenu, label: category.name, id: category.id, value: `/?category=${category.id}`})
-    //             })
-    //             setFilters(prevState => [...prevState, ...list])
-    //         });
-    // },[]);
+    useEffect(() => {
+        db.collection('categories')
+            .orderBy('order', 'asc') // 昇順
+            .get()
+            .then(snapshots => {
+                const list = [];
+                snapshots.forEach(snapshot => {
+                    const category = snapshot.data();
+                    list.push({
+                        func: selectMenu,
+                        label: category.name,
+                        id: category.id,
+                        value: `/?category=${category.id}`
+                    });
+                })
+                setFilters((prevState) => [...prevState, ...list]); // 前のリストに加える方法
+            });
+    },[]);
 
     const inputSearchKeyword = useCallback((e) => {
         setSearchKeyword(e.target.value);
@@ -160,14 +171,17 @@ const ClosableDrawer = (props) => {
                             <ListItemText primary={'ログアウト'} />
                         </ListItem>
                     </List>
-                    {/* <Divider />
+                    <Divider />
                     <List>
                         {filters.map(filter => (
-                            <ListItem button key={filter.id} onClick={(e) => filter.func(e, filter.value)}>
+                            <ListItem
+                                button
+                                key={filter.id}
+                                onClick={(e) => filter.func(e, filter.value)}>
                                 <ListItemText primary={filter.label} />
                             </ListItem>
                         ))}
-                    </List> */}
+                    </List>
                 </div>
             </Drawer>
         </nav>

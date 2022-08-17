@@ -4,9 +4,16 @@ import { deleteProductAction, fetchProductsAction } from './action';
 
 const productsRef = db.collection('products');
 
-export const fetchProducts = () => {
+export const fetchProducts = (gender, category) => {
     return async (dispatch) => {
-        productsRef.orderBy('updated_at', 'desc').get()
+        let query = productsRef.orderBy('updated_at', 'desc') // 新しい日付順
+        // gender値が存在する場合、genderが指定されているproductだけを取得
+        query = (gender !== '') ? query.where('gender', '==', gender) : query;
+        // category値が存在する場合、categoryが指定されているproductだけを取得
+        query = (category !== '') ? query.where('category', '==', category) : query;
+
+        query
+            .get()
             .then((snapshots) => {
                 const productList = [];
                 snapshots.forEach((snapshot) => {
@@ -14,8 +21,8 @@ export const fetchProducts = () => {
                     productList.push(product);
                 });
                 dispatch(fetchProductsAction(productList));
-            })
-    }
+            });
+    };
 };
 
 export const orderProduct = (productsInCart, amount) => {
